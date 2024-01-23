@@ -14,7 +14,7 @@ import (
 const (
 	// underscore prefix so go tool excludes corpus directory.
 	corpusFolderName = "_corpus"
-	dirMode          = 0777
+	dirMode          = 0o777
 	host             = "github.com"
 	hostURL          = "https://" + host
 )
@@ -96,7 +96,7 @@ func main() {
 			tags = repo.Tags
 		}
 
-		dirs := []Subdir{Subdir{Pkg: repo.Repo}}
+		dirs := []Subdir{{Pkg: repo.Repo}}
 		if len(repo.Subdirs) > 0 {
 			dirs = repo.Subdirs
 		}
@@ -109,7 +109,12 @@ func main() {
 			if subdir.Pkg != repo.Repo {
 				goos.Chdir(subdir.Pkg)
 			}
-			cmd := []string{"test", "-v", "-target=" + target, "-tags=" + tags}
+
+			cmd := []string{"test", "-v", "-tags=" + tags}
+			if target != "" {
+				cmd = append(cmd, "-target="+target)
+			}
+
 			if *keepGoing {
 				goos.StartNonFatal(*compiler, cmd...)
 			} else {
@@ -122,7 +127,6 @@ func main() {
 		log.Printf("finished module %d/%d %s", countRepo, len(repos), repo.Repo)
 	}
 	goos.Wait()
-
 }
 
 type T struct {
@@ -138,7 +142,6 @@ type Subdir struct {
 }
 
 func loadRepos(f string) ([]T, error) {
-
 	yf, err := os.ReadFile(f)
 	if err != nil {
 		return nil, err

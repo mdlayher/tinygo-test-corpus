@@ -86,7 +86,6 @@
   - pkg: curve25519
   - pkg: ed25519
   - pkg: hkdf
-  - pkg: internal/subtle
   - pkg: md4
   - pkg: nacl/auth
   - pkg: nacl/box
@@ -235,9 +234,9 @@
 - repo: cloudflare/bn256
   tags: generic
 # "cloudflare/ahocorasick" -- interp timeout building regexps in test
-- repo: google/open-location-code
-  subdirs:
-    - pkg: go
-      skipwasi: true # needs file access
-- repo: chewxy/math32
-  tags: noasm
+#- repo: google/open-location-code
+#  subdirs:
+#    - pkg: go
+#      skipwasi: true # needs file access
+#- repo: chewxy/math32
+#  tags: noasm
